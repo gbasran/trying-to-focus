@@ -1,30 +1,32 @@
-/* ==================== CONFIGURATION ==================== */
+/* variables because i hate hardcoding hex codes */
 :root {
     --neon-blue: #00f3ff;
     --neon-pink: #ff00ff;
     --neon-red: #ff3333;
     --neon-green: #33ff33;
+    
     --bg-dark: #050510;
     --font-mono: 'Courier New', Courier, monospace;
     
-    /* Dynamic Stress Variables (Controlled by JS) */
+    /* js updates these during runtime so the screen gets blurry when you panic */
     --stress-blur: 0px;
     --stress-sat: 100%;
 }
 
+/* basics */
 body {
     margin: 0;
     padding: 0;
     background-color: var(--bg-dark);
     color: white;
     font-family: var(--font-mono);
-    overflow: hidden; /* Prevents scrollbars during game */
+    overflow: hidden; /* no scrollbars allowed in the game */
     height: 100vh;
-    cursor: crosshair;
+    cursor: crosshair; /* looks cooler */
     user-select: none;
 }
 
-/* ==================== GLOBAL FILTERS ==================== */
+/* layers for the visual noise/stress mechanics */
 #stress-filter-layer {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -34,6 +36,7 @@ body {
     transition: backdrop-filter 0.2s;
 }
 
+/* crt scanline effect */
 .scanlines {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -43,6 +46,7 @@ body {
     z-index: 90;
 }
 
+/* darken the edges */
 .vignette {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -51,6 +55,7 @@ body {
     z-index: 89;
 }
 
+/* scary red flash overlay when stress is high */
 .glitch-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -61,12 +66,12 @@ body {
     pointer-events: none;
 }
 
-/* ==================== NAVIGATION BAR ==================== */
+/* navigation styling */
 nav {
     position: fixed;
     top: 0; 
     left: 0; 
-    width: 100%; /* Ensures full width */
+    width: 100%;
     height: 60px;
     background: rgba(5, 5, 16, 0.98);
     border-bottom: 2px solid var(--neon-blue);
@@ -75,7 +80,7 @@ nav {
     align-items: center;
     padding: 0 20px;
     z-index: 200;
-    box-sizing: border-box; /* Fixes the resolution snapping issue */
+    box-sizing: border-box; /* stops it from breaking the width */
     backdrop-filter: blur(5px);
 }
 
@@ -118,7 +123,7 @@ nav {
     color: black;
 }
 
-/* ==================== LAYOUT & TYPOGRAPHY ==================== */
+/* main layout containers */
 .center-stage {
     position: absolute;
     top: 50%; left: 50%;
@@ -127,7 +132,6 @@ nav {
     width: 100%;
     max-width: 700px;
     z-index: 100;
-    /* Adjust for navbar */
     margin-top: 20px;
 }
 
@@ -181,6 +185,7 @@ h1.glitch-text {
     margin-right: 10px;
 }
 
+/* button styling */
 .cy-button {
     background: transparent;
     border: 2px solid var(--neon-blue);
@@ -210,7 +215,7 @@ h1.glitch-text {
 
 .hidden { display: none !important; }
 
-/* ==================== HUD ==================== */
+/* hud stuff */
 .esc-hint {
     position: absolute;
     top: 10px;
@@ -273,7 +278,7 @@ h1.glitch-text {
     animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* ==================== THE BRAIN TARGET ==================== */
+/* the brain styling */
 .brain-wrapper {
     position: absolute;
     width: 150px;
@@ -308,6 +313,7 @@ h1.glitch-text {
     animation: spin 10s linear infinite;
 }
 
+/* line connecting mouse to brain */
 .tether-layer {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -315,7 +321,7 @@ h1.glitch-text {
     z-index: 40;
 }
 
-/* ==================== DISTRACTIONS ==================== */
+/* enemy spawn styling */
 .distraction {
     position: absolute;
     background: #000;
@@ -346,7 +352,6 @@ h1.glitch-text {
     animation: shake 0.5s infinite;
 }
 
-/* ==================== PARTICLES ==================== */
 .particle {
     position: absolute;
     width: 3px; height: 3px;
@@ -355,7 +360,7 @@ h1.glitch-text {
     z-index: 80;
 }
 
-/* ==================== EDUCATIONAL DATA LOGS ==================== */
+/* educational content styling */
 .data-log {
     position: absolute;
     top: 80px;
@@ -372,7 +377,7 @@ h1.glitch-text {
     animation: slideUp 0.5s ease-out;
     z-index: 150;
     margin-bottom: 50px;
-    box-sizing: border-box; /* Ensures padding doesn't break layout */
+    box-sizing: border-box;
 }
 
 .data-log h2 {
@@ -425,7 +430,30 @@ h1.glitch-text {
     margin-top: 30px;
 }
 
-/* ==================== ANIMATIONS ==================== */
+/* extra summary text */
+.calc-explanation {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #888;
+    background: rgba(0,0,0,0.5);
+    border: 1px dashed #333;
+    padding: 15px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.4;
+}
+
+.calc-title {
+    color: var(--neon-blue);
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 0;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* animations */
 @keyframes spin { 100% { transform: rotate(360deg); } }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
@@ -453,26 +481,4 @@ section { transition: opacity 0.3s ease; }
     .log-grid { grid-template-columns: 1fr; }
     h1.glitch-text { font-size: 2.5rem; }
     .hud-top { flex-direction: column; align-items: center; gap: 10px; }
-}
-/* ==================== SUMMARY EXPLANATION ==================== */
-.calc-explanation {
-    margin-top: 20px;
-    font-size: 0.85rem;
-    color: #888;
-    background: rgba(0,0,0,0.5);
-    border: 1px dashed #333;
-    padding: 15px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.4;
-}
-
-.calc-title {
-    color: var(--neon-blue);
-    font-weight: bold;
-    margin-bottom: 5px;
-    margin-top: 0;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
 }
