@@ -1,0 +1,21 @@
+/* basics */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: white;
+    font-family: var(--font-mono);
+    overflow: hidden; /* no scrollbars allowed in the game */
+    height: 100vh;
+    cursor: crosshair; /* looks cooler */
+    user-select: none;
+}
+
+section { transition: opacity 0.3s ease; }
+.fade-active { opacity: 1; }
+
+@media (max-width: 600px) {
+    .log-grid { grid-template-columns: 1fr; }
+    h1.glitch-text { font-size: 2.5rem; }
+    .hud-top { flex-direction: column; align-items: center; gap: 10px; }
+}

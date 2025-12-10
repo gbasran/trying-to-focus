@@ -1,0 +1,38 @@
+/* enemy spawn styling */
+.distraction {
+    position: absolute;
+    background: #000;
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    padding: 8px 15px;
+    font-weight: bold;
+    font-family: monospace;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+    z-index: 60;
+    animation: float 3s ease-in-out infinite;
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.distraction:hover {
+    background: var(--neon-red);
+    color: black;
+    transform: scale(1.1);
+    z-index: 70;
+}
+
+.distraction.sticky {
+    border-color: var(--neon-pink);
+    color: var(--neon-pink);
+    animation: shake 0.5s infinite;
+}
+
+.particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: white;
+    pointer-events: none;
+    z-index: 80;
+}

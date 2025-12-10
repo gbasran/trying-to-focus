@@ -1,0 +1,62 @@
+/* hud stuff */
+.esc-hint {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    color: #444;
+    font-size: 0.8rem;
+    z-index: 95;
+    letter-spacing: 2px;
+}
+
+.hud-top {
+    position: absolute;
+    top: 40px; left: 20px; right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 100;
+}
+
+.hud-group { text-align: left; }
+.hud-group.right-align { text-align: right; }
+
+.hud-label {
+    font-size: 0.7rem;
+    color: #666;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.time-readout {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 10px white;
+    font-family: monospace;
+}
+
+.stress-bar-bg {
+    width: 300px;
+    height: 10px;
+    background: #111;
+    border: 1px solid #444;
+    position: relative;
+    overflow: hidden;
+}
+
+.stress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-red));
+    transition: width 0.1s linear;
+}
+
+.combo-box {
+    font-size: 1.5rem;
+    color: var(--neon-pink);
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--neon-pink);
+    animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}

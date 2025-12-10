@@ -1,0 +1,14 @@
+/* variables because i hate hardcoding hex codes */
+:root {
+    --neon-blue: #00f3ff;
+    --neon-pink: #ff00ff;
+    --neon-red: #ff3333;
+    --neon-green: #33ff33;
+    
+    --bg-dark: #050510;
+    --font-mono: 'Courier New', Courier, monospace;
+    
+    /* js updates these during runtime so the screen gets blurry when you panic */
+    --stress-blur: 0px;
+    --stress-sat: 100%;
+}

@@ -1,0 +1,29 @@
+/* button styling */
+.cy-button {
+    background: transparent;
+    border: 2px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 15px 50px;
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.2s;
+    letter-spacing: 2px;
+    margin-top: 20px;
+}
+
+.cy-button:hover {
+    background: var(--neon-blue);
+    color: black;
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.cy-button.small {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin: 10px;
+}
+
+.hidden { display: none !important; }

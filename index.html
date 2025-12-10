@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEURO-DRIFT // ADHD Simulator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="mode-intro">
     
@@ -95,6 +95,10 @@
 
         <section id="summary-section" class="center-stage hidden">
             <h2 id="end-title" class="glitch-text">SESSION_TERMINATED</h2>
+            
+            <p id="end-message" class="mission-status"></p>
+            <p id="end-reason" class="mission-reason"></p>
+
             <div class="stats-grid">
                 <div class="stat-box">
                     <div class="stat-num" id="final-focus">0%</div>
@@ -107,9 +111,9 @@
             </div>
 
             <div class="calc-explanation">
-                <p class="calc-title">>> SYSTEM_LOG: EFFICIENCY_CALC</p>
-                <p>Focus recharges slowly (+0.2) but decays rapidly (-0.3). This mathematical imbalance simulates <strong>Switching Cost</strong>: it takes significantly more energy to regain attention than it does to lose it.</p>
-            </div>
+              <p class="calc-title">>> SYSTEM_LOG: EFFICIENCY_CALC</p>
+              <p>Efficiency is now a weighted aggregate of <strong>Signal Stability (70%)</strong> and <strong>Noise Cancellation (30%)</strong>. Maintaining focus is critical, but ignoring the red distraction nodes will eventually crash the system regardless of your focus level.</p>
+          </div>
             
             <div class="action-buttons">
                 <button class="cy-button small" onclick="navigateTo('edu-drift')">ACCESS ANALYSIS</button>

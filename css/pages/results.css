@@ -1,0 +1,44 @@
+/* extra summary text */
+.calc-explanation {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #888;
+    background: rgba(0,0,0,0.5);
+    border: 1px dashed #333;
+    padding: 15px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.4;
+}
+
+.calc-title {
+    color: var(--neon-blue);
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 0;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.mission-status {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin: 10px 0;
+    text-shadow: 0 0 10px currentColor; 
+}
+
+.mission-reason {
+  color: #aaa;
+  font-size: 0.9rem;
+  max-width: 600px;
+  margin: 0 auto 30px auto; /* keeps the box centered */
+  line-height: 1.4;
+  
+  /* changed this stuff to center the text */
+  text-align: center; 
+  border-left: none; /* removed the bar so it's clean */
+  padding-left: 0;
+  font-family: var(--font-mono);
+}

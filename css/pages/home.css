@@ -1,0 +1,61 @@
+/* main layout containers */
+.center-stage {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    max-width: 700px;
+    z-index: 100;
+    margin-top: 20px;
+}
+
+h1.glitch-text {
+    font-size: 4rem;
+    color: white;
+    text-shadow: 2px 0 var(--neon-red), -2px 0 var(--neon-blue);
+    animation: glitch-skew 1s infinite linear alternate-reverse;
+    margin: 0;
+}
+
+.subtitle {
+    color: #666;
+    letter-spacing: 4px;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+.tutorial-card {
+    background: rgba(0,0,0,0.8);
+    border: 1px solid var(--neon-blue);
+    padding: 25px;
+    margin: 20px auto;
+    text-align: left;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+    max-width: 600px;
+}
+
+.tutorial-card h3 {
+    margin-top: 0;
+    color: var(--neon-blue);
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.instruction-list {
+    list-style: none;
+    padding: 0;
+}
+
+.instruction-list li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+.symbol {
+    color: var(--neon-pink);
+    font-weight: bold;
+    margin-right: 10px;
+}

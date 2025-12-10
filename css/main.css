@@ -1,0 +1,19 @@
+/* Main stylesheet - imports all modular CSS files */
+
+/* Base styles */
+@import url('base/variables.css');
+@import url('base/reset.css');
+@import url('base/animations.css');
+
+/* Components */
+@import url('components/navigation.css');
+@import url('components/hud.css');
+@import url('components/buttons.css');
+@import url('components/effects.css');
+@import url('components/brain.css');
+@import url('components/distractions.css');
+
+/* Pages */
+@import url('pages/home.css');
+@import url('pages/education.css');
+@import url('pages/results.css');

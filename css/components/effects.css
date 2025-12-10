@@ -1,0 +1,39 @@
+/* layers for the visual noise/stress mechanics */
+#stress-filter-layer {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    backdrop-filter: blur(var(--stress-blur)) grayscale(calc(100% - var(--stress-sat)));
+    pointer-events: none;
+    z-index: 10;
+    transition: backdrop-filter 0.2s;
+}
+
+/* crt scanline effect */
+.scanlines {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 90;
+}
+
+/* darken the edges */
+.vignette {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.8) 100%);
+    pointer-events: none;
+    z-index: 89;
+}
+
+/* scary red flash overlay when stress is high */
+.glitch-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 0, 50, 0.1);
+    mix-blend-mode: color-dodge;
+    z-index: 80;
+    animation: flash 0.1s infinite;
+    pointer-events: none;
+}

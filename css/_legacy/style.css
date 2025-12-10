@@ -453,6 +453,28 @@ h1.glitch-text {
     letter-spacing: 1px;
 }
 
+.mission-status {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin: 10px 0;
+    text-shadow: 0 0 10px currentColor; 
+}
+
+.mission-reason {
+  color: #aaa;
+  font-size: 0.9rem;
+  max-width: 600px;
+  margin: 0 auto 30px auto; /* keeps the box centered */
+  line-height: 1.4;
+  
+  /* changed this stuff to center the text */
+  text-align: center; 
+  border-left: none; /* removed the bar so it's clean */
+  padding-left: 0;
+  font-family: var(--font-mono);
+}
+
 /* animations */
 @keyframes spin { 100% { transform: rotate(360deg); } }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }

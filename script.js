@@ -2,11 +2,19 @@
 const CONFIG = {
     TOTAL_TIME: 30,
     MAX_STRESS: 100,
-    STRESS_GAIN_IDLE: 0.15, // ambient anxiety gain
+    
+    // REBALANCED: Dropped idle stress to 0.05 so it matches the healing rate
+    STRESS_GAIN_IDLE: 0.05, 
+    STRESS_HEAL_ACTIVE: 0.05, // Added this to config for clarity
+    
     STRESS_GAIN_HIT: 15, // ouch
-    STRESS_HEAL_CLICK: 8, // dopamine hit
+    STRESS_HEAL_CLICK: 10, // dopamine hit
+    STRESS_FROM_CLUTTER: 0.05, // how much stress EACH distraction adds per frame
+    
     FOCUS_GAIN: 0.2, // slow charge
-    FOCUS_LOSS: 0.3, // fast drain, because adhd
+    // REBALANCED: Dropped loss to 0.2 to make it less punishing
+    FOCUS_LOSS: 0.2, 
+    
     BRAIN_SPEED: 2.5,
     SPAWN_RATE: 1200
 };
@@ -22,7 +30,12 @@ const STATE = {
     brainPos: { x: window.innerWidth/2, y: window.innerHeight/2, vx: 1, vy: 1 },
     isHoveringBrain: false,
     combo: 0,
-    distractionsCleared: 0
+    distractionsCleared: 0,
+    
+    // NEW: Stats for the efficiency calculation
+    totalDistractionsSpawned: 0,
+    cumulativeFocus: 0,
+    totalFrames: 0
 };
 
 // grab all the dom elements we need. organized by group so i dont lose my mind
@@ -107,6 +120,11 @@ function startGame() {
     STATE.combo = 0;
     STATE.distractionsCleared = 0;
     
+    // NEW: Reset stats for calculation
+    STATE.totalDistractionsSpawned = 0;
+    STATE.cumulativeFocus = 0;
+    STATE.totalFrames = 0;
+    
     // hide nav while playing
     els.nav.classList.add('hidden');
     
@@ -137,22 +155,40 @@ function update() {
     // time ticks down
     STATE.timeLeft -= 0.016;
     els.hud.timer.innerText = STATE.timeLeft.toFixed(2);
+    
+    // NEW: track data for average
+    STATE.cumulativeFocus += STATE.focusLevel;
+    STATE.totalFrames++;
 
     // handle movement
     moveBrain();
     updateTether();
 
+    // calculate crowd penalty. 
+    // count how many red distractions exist and add stress for each one.
+    // this forces the user to clear them or die.
+    const activeDistractions = els.layer.children.length;
+    if (activeDistractions > 0) {
+        STATE.stress += activeDistractions * CONFIG.STRESS_FROM_CLUTTER;
+    }
+
     // handle mechanics
     if (STATE.isHoveringBrain) {
         // good: charging focus
         STATE.focusLevel = Math.min(100, STATE.focusLevel + CONFIG.FOCUS_GAIN);
-        STATE.stress = Math.max(0, STATE.stress - 0.05);
+        
+        // focusing heals stress. now uses the config value (0.05) so it equals the gain
+        STATE.stress = Math.max(0, STATE.stress - CONFIG.STRESS_HEAL_ACTIVE);
+        
         els.brain.status.innerText = "SIGNAL_LOCK";
         els.brain.status.style.color = "var(--neon-green)";
     } else {
         // bad: losing focus
         STATE.focusLevel = Math.max(0, STATE.focusLevel - CONFIG.FOCUS_LOSS);
+        
+        // idle stress gain
         STATE.stress = Math.min(100, STATE.stress + CONFIG.STRESS_GAIN_IDLE);
+        
         els.brain.status.innerText = "SIGNAL_LOST";
         els.brain.status.style.color = "var(--neon-red)";
     }
@@ -252,6 +288,9 @@ function spawnDistraction() {
     // prevents crashing if too many pile up
     if (els.layer.children.length > 15) return;
 
+    // NEW: increment total count for stats
+    STATE.totalDistractionsSpawned++;
+
     const el = document.createElement('div');
     el.className = 'distraction';
     el.innerText = THOUGHTS[Math.floor(Math.random() * THOUGHTS.length)];
@@ -316,7 +355,8 @@ function spawnParticles(x, y) {
     }
 }
 
-// kill everything and show results
+// kill everything and show results. 
+// updated to tell the user WHY they failed/won.
 function endGame() {
     STATE.running = false;
     cancelAnimationFrame(gameLoopId);
@@ -326,20 +366,55 @@ function endGame() {
 
     navigateTo('summary-section');
     
-    const finalFocus = Math.floor(STATE.focusLevel);
-    document.getElementById('final-focus').innerText = finalFocus + "%";
-    document.getElementById('final-distractions').innerText = STATE.distractionsCleared;
+    // NEW: complex efficiency calculation
+    // 1. calculate average focus held throughout the session
+    let avgFocus = 0;
+    if (STATE.totalFrames > 0) {
+        avgFocus = STATE.cumulativeFocus / STATE.totalFrames;
+    }
     
-    const msg = document.getElementById('end-message');
-    if (STATE.stress >= 100) {
-        msg.innerText = "STATUS: SENSORY_OVERLOAD";
-        msg.style.color = "var(--neon-red)";
+    // 2. calculate clear rate (avoid division by zero if you died instantly)
+    let clearRate = 0;
+    if (STATE.totalDistractionsSpawned > 0) {
+        clearRate = (STATE.distractionsCleared / STATE.totalDistractionsSpawned) * 100;
     } else {
-        msg.innerText = "STATUS: COMPLETE";
-        msg.style.color = "var(--neon-green)";
+        clearRate = 100; // if none spawned, technically you cleared 100% of the threat
     }
 
-    // fix the screen filters
+    // 3. weighted score: 70% focus consistency, 30% cleaning up mess
+    const finalScore = Math.floor((avgFocus * 0.7) + (clearRate * 0.3));
+
+    // show stats
+    document.getElementById('final-focus').innerText = finalScore + "%";
+    document.getElementById('final-distractions').innerText = STATE.distractionsCleared;
+    
+    // grab the text elements
+    const title = document.getElementById('end-title');
+    const msg = document.getElementById('end-message');
+    const reason = document.getElementById('end-reason');
+
+    // figure out if we died or just ran out of time
+    if (STATE.stress >= 100) {
+        // bad ending: stress overload
+        title.innerText = "SYSTEM_CRASH";
+        title.style.textShadow = "2px 0 var(--neon-red), -2px 0 var(--neon-pink)";
+        
+        msg.innerText = "STATUS: SENSORY_OVERLOAD";
+        msg.style.color = "var(--neon-red)";
+        
+        reason.innerHTML = "FAILURE_ANALYSIS: Stress levels exceeded 100%. Too many red distraction nodes accumulated in the workspace. The brain was unable to filter the noise, resulting in a total executive shutdown.";
+    } else {
+        // good ending: timer ran out
+        title.innerText = "SESSION_COMPLETE";
+        title.style.textShadow = "2px 0 var(--neon-green), -2px 0 var(--neon-blue)";
+
+        msg.innerText = "STATUS: STABLE";
+        msg.style.color = "var(--neon-green)";
+        
+        reason.innerHTML = "SUCCESS_ANALYSIS: Timer reached 0.00 without a system crash. Despite the constant drift and external noise, you successfully regulated dopamine levels and maintained executive control.";
+    }
+
+    // fix the screen filters so we can actually read the text
     els.root.style.setProperty('--stress-blur', `0px`);
     els.root.style.setProperty('--stress-sat', `100%`);
     els.glitch.classList.add('hidden');
