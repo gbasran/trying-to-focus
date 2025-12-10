@@ -1,0 +1,478 @@
+/* ==================== CONFIGURATION ==================== */
+:root {
+    --neon-blue: #00f3ff;
+    --neon-pink: #ff00ff;
+    --neon-red: #ff3333;
+    --neon-green: #33ff33;
+    --bg-dark: #050510;
+    --font-mono: 'Courier New', Courier, monospace;
+    
+    /* Dynamic Stress Variables (Controlled by JS) */
+    --stress-blur: 0px;
+    --stress-sat: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: white;
+    font-family: var(--font-mono);
+    overflow: hidden; /* Prevents scrollbars during game */
+    height: 100vh;
+    cursor: crosshair;
+    user-select: none;
+}
+
+/* ==================== GLOBAL FILTERS ==================== */
+#stress-filter-layer {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    backdrop-filter: blur(var(--stress-blur)) grayscale(calc(100% - var(--stress-sat)));
+    pointer-events: none;
+    z-index: 10;
+    transition: backdrop-filter 0.2s;
+}
+
+.scanlines {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 90;
+}
+
+.vignette {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.8) 100%);
+    pointer-events: none;
+    z-index: 89;
+}
+
+.glitch-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 0, 50, 0.1);
+    mix-blend-mode: color-dodge;
+    z-index: 80;
+    animation: flash 0.1s infinite;
+    pointer-events: none;
+}
+
+/* ==================== NAVIGATION BAR ==================== */
+nav {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100%; /* Ensures full width */
+    height: 60px;
+    background: rgba(5, 5, 16, 0.98);
+    border-bottom: 2px solid var(--neon-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 200;
+    box-sizing: border-box; /* Fixes the resolution snapping issue */
+    backdrop-filter: blur(5px);
+}
+
+.nav-brand {
+    font-weight: 900;
+    color: var(--neon-blue);
+    letter-spacing: 2px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    transition: 0.2s;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.nav-btn:hover {
+    border-color: var(--neon-blue);
+    color: white;
+    background: rgba(0, 243, 255, 0.1);
+}
+
+.nav-btn.restart {
+    border-color: var(--neon-red);
+    color: var(--neon-red);
+}
+
+.nav-btn.restart:hover {
+    background: var(--neon-red);
+    color: black;
+}
+
+/* ==================== LAYOUT & TYPOGRAPHY ==================== */
+.center-stage {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    max-width: 700px;
+    z-index: 100;
+    /* Adjust for navbar */
+    margin-top: 20px;
+}
+
+h1.glitch-text {
+    font-size: 4rem;
+    color: white;
+    text-shadow: 2px 0 var(--neon-red), -2px 0 var(--neon-blue);
+    animation: glitch-skew 1s infinite linear alternate-reverse;
+    margin: 0;
+}
+
+.subtitle {
+    color: #666;
+    letter-spacing: 4px;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+.tutorial-card {
+    background: rgba(0,0,0,0.8);
+    border: 1px solid var(--neon-blue);
+    padding: 25px;
+    margin: 20px auto;
+    text-align: left;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+    max-width: 600px;
+}
+
+.tutorial-card h3 {
+    margin-top: 0;
+    color: var(--neon-blue);
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.instruction-list {
+    list-style: none;
+    padding: 0;
+}
+
+.instruction-list li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+.symbol {
+    color: var(--neon-pink);
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.cy-button {
+    background: transparent;
+    border: 2px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 15px 50px;
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.2s;
+    letter-spacing: 2px;
+    margin-top: 20px;
+}
+
+.cy-button:hover {
+    background: var(--neon-blue);
+    color: black;
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.cy-button.small {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin: 10px;
+}
+
+.hidden { display: none !important; }
+
+/* ==================== HUD ==================== */
+.esc-hint {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    color: #444;
+    font-size: 0.8rem;
+    z-index: 95;
+    letter-spacing: 2px;
+}
+
+.hud-top {
+    position: absolute;
+    top: 40px; left: 20px; right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 100;
+}
+
+.hud-group { text-align: left; }
+.hud-group.right-align { text-align: right; }
+
+.hud-label {
+    font-size: 0.7rem;
+    color: #666;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.time-readout {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 10px white;
+    font-family: monospace;
+}
+
+.stress-bar-bg {
+    width: 300px;
+    height: 10px;
+    background: #111;
+    border: 1px solid #444;
+    position: relative;
+    overflow: hidden;
+}
+
+.stress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-red));
+    transition: width 0.1s linear;
+}
+
+.combo-box {
+    font-size: 1.5rem;
+    color: var(--neon-pink);
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--neon-pink);
+    animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ==================== THE BRAIN TARGET ==================== */
+.brain-wrapper {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    z-index: 50;
+    cursor: none;
+}
+
+#brian-the-brain {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px var(--neon-blue));
+    transition: transform 0.1s;
+}
+
+.status-text {
+    position: absolute;
+    bottom: -30px;
+    width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--neon-red);
+    text-shadow: 1px 1px black;
+    pointer-events: none;
+}
+
+#brain-aura {
+    transform-origin: center;
+    animation: spin 10s linear infinite;
+}
+
+.tether-layer {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 40;
+}
+
+/* ==================== DISTRACTIONS ==================== */
+.distraction {
+    position: absolute;
+    background: #000;
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    padding: 8px 15px;
+    font-weight: bold;
+    font-family: monospace;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+    z-index: 60;
+    animation: float 3s ease-in-out infinite;
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.distraction:hover {
+    background: var(--neon-red);
+    color: black;
+    transform: scale(1.1);
+    z-index: 70;
+}
+
+.distraction.sticky {
+    border-color: var(--neon-pink);
+    color: var(--neon-pink);
+    animation: shake 0.5s infinite;
+}
+
+/* ==================== PARTICLES ==================== */
+.particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: white;
+    pointer-events: none;
+    z-index: 80;
+}
+
+/* ==================== EDUCATIONAL DATA LOGS ==================== */
+.data-log {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid #333;
+    border-top: 4px solid var(--neon-blue);
+    padding: 40px;
+    color: #ddd;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    animation: slideUp 0.5s ease-out;
+    z-index: 150;
+    margin-bottom: 50px;
+    box-sizing: border-box; /* Ensures padding doesn't break layout */
+}
+
+.data-log h2 {
+    color: var(--neon-blue);
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.concept-box {
+    background: rgba(0, 243, 255, 0.05);
+    padding: 20px;
+    border-left: 2px solid var(--neon-blue);
+    margin: 20px 0;
+}
+
+.log-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.myth-card {
+    background: #0a0a0a;
+    padding: 20px;
+    border: 1px solid #222;
+}
+
+.myth-label { color: var(--neon-red); font-weight: bold; font-size: 0.8rem; margin-bottom: 5px;}
+.fact-label { color: var(--neon-green); font-weight: bold; font-size: 0.8rem; margin-top: 15px; margin-bottom: 5px;}
+
+.strategy-list {
+    list-style: none;
+    padding: 0;
+}
+
+.strategy-list li {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #222;
+    font-size: 0.9rem;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+@keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(-10deg); }
+    40% { transform: skew(10deg); }
+    100% { transform: skew(0deg); }
+}
+@keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+@keyframes slideUp {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes flash {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+section { transition: opacity 0.3s ease; }
+.fade-active { opacity: 1; }
+
+@media (max-width: 600px) {
+    .log-grid { grid-template-columns: 1fr; }
+    h1.glitch-text { font-size: 2.5rem; }
+    .hud-top { flex-direction: column; align-items: center; gap: 10px; }
+}
+/* ==================== SUMMARY EXPLANATION ==================== */
+.calc-explanation {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #888;
+    background: rgba(0,0,0,0.5);
+    border: 1px dashed #333;
+    padding: 15px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.4;
+}
+
+.calc-title {
+    color: var(--neon-blue);
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 0;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}

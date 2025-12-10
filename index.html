@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEURO-DRIFT // ADHD Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-intro">
+    
+    <div id="stress-filter-layer"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <div id="screen-glitch" class="glitch-overlay hidden"></div>
+
+    <nav id="main-nav" class="hidden">
+        <div class="nav-brand">// NEURO_DB</div>
+        <div class="nav-links">
+            <button class="nav-btn" onclick="navigateTo('summary-section')">RESULTS</button>
+            <button class="nav-btn" onclick="navigateTo('edu-drift')">DATA: DRIFT</button>
+            <button class="nav-btn" onclick="navigateTo('edu-myth')">DATA: MYTHS</button>
+            <button class="nav-btn" onclick="navigateTo('edu-coping')">DATA: TOOLS</button>
+            <button class="nav-btn restart restart-btn">[ RESTART ]</button>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <section id="intro-section" class="center-stage fade-active">
+            <h1 class="glitch-text" data-text="NEURO-DRIFT">NEURO-DRIFT</h1>
+            <p class="subtitle">EXECUTIVE FUNCTION SIMULATOR v1.0</p>
+            
+            <div class="tutorial-card">
+                <h3>// MISSION PARAMETERS</h3>
+                <ul class="instruction-list">
+                    <li><span class="symbol">[ TARGET ]</span> <strong>CHASE THE SIGNAL:</strong> The blue node will drift. Keep your mouse ON it to charge Focus.</li>
+                    <li><span class="symbol">[ PURGE ]</span> <strong>CLEAR NOISE:</strong> Click red data nodes to delete them. Accumulation leads to failure.</li>
+                    <li><span class="symbol">[ ! ]</span> <strong>WARNING:</strong> You cannot Focus and Purge simultaneously. Manage your Switching Cost.</li>
+                </ul>
+            </div>
+
+            <button id="start-button" class="cy-button">INITIATE_SEQUENCE</button>
+        </section>
+
+        <section id="simulation-section" class="hidden">
+            <div class="esc-hint">PRESS [ ESC ] TO ABORT SIMULATION</div>
+
+            <div class="hud-top">
+                <div class="hud-group">
+                    <div class="hud-label">T-MINUS</div>
+                    <div class="time-readout" id="timer">30.00</div>
+                </div>
+                
+                <div class="hud-center">
+                     <div class="combo-box hidden" id="combo-display">DOPAMINE_HIT :: x<span id="combo-count">0</span></div>
+                </div>
+
+                <div class="hud-group right-align">
+                    <div class="hud-label">STABILITY_INDEX</div>
+                    <div class="stress-bar-bg">
+                        <div id="stress-fill" class="stress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="brain-container" class="brain-wrapper">
+                <svg id="brian-the-brain" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <circle id="brain-aura" cx="100" cy="100" r="70" fill="none" stroke="#00f3ff" stroke-width="2" stroke-dasharray="10,5" opacity="0.5"/>
+                    <path id="brain-body" d="M40,100 C40,60 70,30 100,30 C130,30 160,60 160,100 C160,140 130,170 100,170 C70,170 40,140 40,100 Z" 
+                          fill="#3b82f6" filter="url(#glow)"/>
+                    <g id="eyes-group">
+                        <ellipse id="eye-left" cx="75" cy="90" rx="8" ry="8" fill="white"/>
+                        <ellipse id="eye-right" cx="125" cy="90" rx="8" ry="8" fill="white"/>
+                        <circle cx="75" cy="90" r="3" fill="black"/>
+                        <circle cx="125" cy="90" r="3" fill="black"/>
+                    </g>
+                    <path id="mouth" d="M85,130 Q100,140 115,130" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <div id="focus-status" class="status-text">NO_SIGNAL</div>
+            </div>
+            
+            <svg id="focus-tether" class="tether-layer">
+                <line id="tether-line" x1="0" y1="0" x2="0" y2="0" stroke="#3b82f6" stroke-width="2"/>
+            </svg>
+
+            <div id="distraction-layer"></div>
+        </section>
+
+        <section id="summary-section" class="center-stage hidden">
+            <h2 id="end-title" class="glitch-text">SESSION_TERMINATED</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-num" id="final-focus">0%</div>
+                    <div class="stat-label">EFFICIENCY</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-num" id="final-distractions">0</div>
+                    <div class="stat-label">OBJECTS_PURGED</div>
+                </div>
+            </div>
+
+            <div class="calc-explanation">
+                <p class="calc-title">>> SYSTEM_LOG: EFFICIENCY_CALC</p>
+                <p>Focus recharges slowly (+0.2) but decays rapidly (-0.3). This mathematical imbalance simulates <strong>Switching Cost</strong>: it takes significantly more energy to regain attention than it does to lose it.</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="cy-button small" onclick="navigateTo('edu-drift')">ACCESS ANALYSIS</button>
+                <button class="cy-button small restart-btn">RETRY_SIM</button>
+            </div>
+        </section>
+
+        <section id="edu-drift" class="data-log hidden">
+            <h2>FILE_01 :: THE_DRIFT</h2>
+            <div class="log-content">
+                <p>In this simulation, the target constantly drifts away from input. This simulates <strong>Executive Dysfunction</strong>.</p>
+                <div class="concept-box">
+                    <h4>// OBSERVATION</h4>
+                    <p>Individuals with ADHD often identify the objective (the target) clearly, yet the attentional mechanism (the drift) refuses to lock on. This is a failure of regulation, not willpower.</p>
+                </div>
+                <p>Abandoning the target to click red nodes causes a drop in efficiency. This represents <strong>Switching Costs</strong>. For a neurotypical brain, switching contexts is low-cost. For an ADHD brain, the metabolic cost to refocus is significantly higher.</p>
+            </div>
+            <button class="cy-button next-btn" onclick="navigateTo('edu-myth')">NEXT_FILE >></button>
+        </section>
+
+        <section id="edu-myth" class="data-log hidden">
+            <h2>FILE_02 :: SYSTEM_MYTHS</h2>
+            <div class="log-grid">
+                <div class="myth-card">
+                    <div class="myth-label">>> QUERY: HYPERACTIVITY</div>
+                    <p>MYTH: "ADHD implies physical hyperactivity."</p>
+                    <div class="fact-label">>> STATUS: FALSE</div>
+                    <p>REALITY: It is a regulation disorder. It often manifests as "Inattentive" (internal noise, time blindness) rather than physical movement.</p>
+                </div>
+                <div class="myth-card">
+                    <div class="myth-label">>> QUERY: PREVALENCE</div>
+                    <p>MYTH: "Everyone is a little ADHD."</p>
+                    <div class="fact-label">>> STATUS: FALSE</div>
+                    <p>REALITY: Everyone experiences distraction. ADHD is defined by frequency and severity that impairs life functions, employment, and health.</p>
+                </div>
+            </div>
+            <button class="cy-button next-btn" onclick="navigateTo('edu-coping')">NEXT_FILE >></button>
+        </section>
+
+        <section id="edu-coping" class="data-log hidden">
+            <h2>FILE_03 :: EXTERNAL_RAM</h2>
+            <div class="log-content">
+                <p>Internal working memory (RAM) is compromised. Survival requires "External RAM" protocols:</p>
+                <ul class="strategy-list">
+                    <li><span class="symbol">::</span> <strong>BODY_DOUBLING:</strong> Using another presence to anchor focus.</li>
+                    <li><span class="symbol">::</span> <strong>VISUAL_TIMERS:</strong> replacing abstract time with visual data (e.g., the bar in this sim).</li>
+                    <li><span class="symbol">::</span> <strong>GAMIFICATION:</strong> Artificial dopamine injection to jumpstart task initiation.</li>
+                </ul>
+            </div>
+            <div class="action-buttons">
+                <button class="cy-button restart-btn">REBOOT_SYSTEM</button>
+            </div>
+        </section>
+
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
