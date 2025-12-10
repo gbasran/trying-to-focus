@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEURO-DRIFT // ADHD Simulator</title>
+    <meta name="description" content="An interactive simulation exploring executive dysfunction in ADHD through game mechanics and educational content.">
+    <meta name="author" content="Gurmann Basran">
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="mode-intro">
-    
+    <!-- Visual effects layers -->
     <div id="stress-filter-layer"></div>
     <div class="scanlines"></div>
     <div class="vignette"></div>
@@ -16,10 +18,10 @@
     <nav id="main-nav" class="hidden">
         <div class="nav-brand">// NEURO_DRIFT</div>
         <div class="nav-links">
-            <button class="nav-btn" onclick="navigateTo('summary-section')">RESULTS</button>
-            <button class="nav-btn" onclick="navigateTo('edu-drift')">DATA: DRIFT</button>
-            <button class="nav-btn" onclick="navigateTo('edu-myth')">DATA: MYTHS</button>
-            <button class="nav-btn" onclick="navigateTo('edu-coping')">DATA: TOOLS</button>
+            <button class="nav-btn" data-nav="summary-section">RESULTS</button>
+            <button class="nav-btn" data-nav="edu-drift">DATA: DRIFT</button>
+            <button class="nav-btn" data-nav="edu-myth">DATA: MYTHS</button>
+            <button class="nav-btn" data-nav="edu-coping">DATA: TOOLS</button>
             <button class="nav-btn restart restart-btn">[ RESTART ]</button>
         </div>
     </nav>
@@ -116,7 +118,7 @@
           </div>
             
             <div class="action-buttons">
-                <button class="cy-button small" onclick="navigateTo('edu-drift')">ACCESS ANALYSIS</button>
+                <button class="cy-button small" data-nav="edu-drift">ACCESS ANALYSIS</button>
                 <button class="cy-button small restart-btn">RETRY_SIM</button>
             </div>
         </section>
@@ -150,7 +152,7 @@
                     <p>REALITY: Everyone experiences distraction. ADHD is defined by frequency and severity that impairs life functions, employment, and health.</p>
                 </div>
             </div>
-            <button class="cy-button next-btn" onclick="navigateTo('edu-coping')">NEXT_FILE >></button>
+            <button class="cy-button next-btn" data-nav="edu-coping">NEXT_FILE >></button>
         </section>
 
         <section id="edu-coping" class="data-log hidden">
@@ -169,6 +171,16 @@
         </section>
 
     </main>
+
+    <!-- 
+        NEURO-DRIFT v1.0
+        Created by: Gurmann Basran
+        Course: NMED 3520B Web Design and Development
+        © 2025
+        
+        Brain SVG: Custom designed
+        Educational content: Based on ADHD research and lived experience
+    -->
     <script src="script.js"></script>
 </body>
 </html>

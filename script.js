@@ -75,6 +75,14 @@ document.querySelectorAll('.restart-btn').forEach(btn => {
     btn.addEventListener('click', startGame);
 });
 
+// navigation buttons - uses data-nav attribute for spa navigation
+document.querySelectorAll('[data-nav]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const target = e.currentTarget.getAttribute('data-nav');
+        navigateTo(target);
+    });
+});
+
 // quit game if escape is pressed
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && STATE.running) {
@@ -93,7 +101,7 @@ els.brain.container.addEventListener('mouseenter', () => STATE.isHoveringBrain =
 els.brain.container.addEventListener('mouseleave', () => STATE.isHoveringBrain = false);
 
 // spa navigation logic. toggles hidden classes.
-window.navigateTo = function(targetId) {
+function navigateTo(targetId) {
     // hide everything first
     Object.values(els.sections).forEach(sec => {
         sec.classList.add('hidden');
